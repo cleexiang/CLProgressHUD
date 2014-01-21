@@ -9,7 +9,7 @@
 #import "CLProgressHUD.h"
 
 #ifndef RGBA
-    #define RGBA(r,g,b,a) [UIColor colorWithRed:(float)r/255.0f green:(float)g/255.0f blue:(float)b/255.0f alpha:a]
+#define RGBA(r,g,b,a) [UIColor colorWithRed:(float)r/255.0f green:(float)g/255.0f blue:(float)b/255.0f alpha:a]
 #endif
 
 static float const xMargin = 10;
@@ -28,18 +28,12 @@ float Degrees2Radians(float degrees) { return degrees * M_PI / 180; }
 
 @implementation CLProgressHUD
 
-+ (instancetype)shareInstance {
-    static CLProgressHUD *_instance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _instance = [[self alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    });
-    
-    return _instance;
+- (void)dealloc {
+    [self unregisterKVO];
 }
 
-- (void)dealloc {
-    
+- (id)initWithView:(UIView *)view {
+    return [self initWithFrame:view.bounds];
 }
 
 - (id)initWithFrame:(CGRect)frame {
@@ -49,14 +43,13 @@ float Degrees2Radians(float degrees) { return degrees * M_PI / 180; }
         self.backgroundColor = [UIColor clearColor];
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
-        _type = CLProgressHUDTypeDarkForground;
-        _shape = CLProgressHUDShapeLinear;
         if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
             _diameter = 10.0;
         } else {
-            _diameter = 10.0;
+            _diameter = 12.0;
         }
         [self initSubviews];
+        [self registerKVO];
         NSArray *ringsColor = @[RGBA(238, 191, 0, 1),
                                 RGBA(235, 94, 1, 1),
                                 RGBA(220, 2, 75, 1),
@@ -66,32 +59,10 @@ float Degrees2Radians(float degrees) { return degrees * M_PI / 180; }
                                 RGBA(15, 86, 166, 1),
                                 RGBA(10, 170, 180, 1)];
         self.ringsColor = ringsColor;
+        self.type = CLProgressHUDTypeDarkForground;
+        self.shape = CLProgressHUDShapeLinear;
     }
     return self;
-}
-
-- (void)showInView:(UIView *)view {
-    [self showInView:view withText:@""];
-}
-
-- (void)showInView:(UIView *)view withText:(NSString *)text duration:(NSTimeInterval)duration {
-    [self showInView:view withText:text];
-    [self performSelector:@selector(dismiss) withObject:nil afterDelay:duration];
-}
-
-- (void)showInView:(UIView *)view withText:(NSString *)text {
-    self.frame = view.bounds;
-    if (_type == CLProgressHUDTypeDarkBackground) {
-        self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8f];
-        _hudView.backgroundColor = [UIColor clearColor];
-    } else {
-        self.backgroundColor = [UIColor clearColor];
-        _hudView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8f];
-    }
-    [view addSubview:self];
-    self.stringLabel.text = text;
-    [self layout];
-    [self show];
 }
 
 - (void)layoutSubviews {
@@ -134,11 +105,8 @@ float Degrees2Radians(float degrees) { return degrees * M_PI / 180; }
 }
 
 #pragma mark - Private Method
-- (void)setShape:(CLProgressHUDShape)shape {
-    _shape = shape;
-}
-
 - (void)show {
+    [self layout];
     _animationIndex = 0;
     self.alpha = 1.0f;
     self.shapeLayers = [self createColorShapes:_ringsColor ofShape:_shape];
@@ -148,36 +116,12 @@ float Degrees2Radians(float degrees) { return degrees * M_PI / 180; }
     [self startAnimation];
 }
 
-- (void)dismiss {
-    self.alpha = 0.0f;
-    [_shapeLayers makeObjectsPerformSelector:@selector(removeAllAnimations)];
-    [_shapeLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
-}
-
-+ (NSUInteger)hideAllHUDsForView:(UIView *)view animated:(BOOL)animated {
-	NSArray *huds = [CLProgressHUD allHUDsForView:view];
-    [huds makeObjectsPerformSelector:@selector(dismiss)];
-	return [huds count];
-}
-
-+ (NSArray *)allHUDsForView:(UIView *)view {
-	NSMutableArray *huds = [NSMutableArray array];
-	NSArray *subviews = view.subviews;
-	for (UIView *aView in subviews) {
-		if ([aView isKindOfClass:self]) {
-			[huds addObject:aView];
-		}
-	}
-	return [NSArray arrayWithArray:huds];
-}
-
-
 - (NSArray *)createColorShapes:(NSArray *)colors ofShape:(CLProgressHUDShape)shape {
     NSMutableArray *shapesArray = [NSMutableArray array];
     if (shape == CLProgressHUDShapeLinear) {
         CGFloat x = (CGRectGetWidth(_hudView.bounds)-_diameter*(_ringsColor.count*2-1))*0.5;
         CGFloat y;
-        if ([_stringLabel.text isEqualToString:@""]) {
+        if (self.text == nil || [self.text isEqualToString:@""]) {
             y = CGRectGetHeight(_hudView.bounds)*0.5;
         } else {
             y = CGRectGetHeight(_hudView.bounds)*0.5+_diameter;
@@ -200,7 +144,7 @@ float Degrees2Radians(float degrees) { return degrees * M_PI / 180; }
     } else {
         CGFloat centerX = CGRectGetWidth(_hudView.bounds)*0.5;
         CGFloat centerY;
-        if ([_stringLabel.text isEqualToString:@""]) {
+        if (self.text == nil || [self.text isEqualToString:@""]) {
             centerY = (CGRectGetHeight(_hudView.bounds)-_diameter)*0.5;
         } else {
             centerY = (CGRectGetHeight(_hudView.bounds)-_diameter*2)*0.5-5;
@@ -223,7 +167,7 @@ float Degrees2Radians(float degrees) { return degrees * M_PI / 180; }
             i++;
         }
     }
-
+    
     return shapesArray;
 }
 
@@ -254,18 +198,88 @@ float Degrees2Radians(float degrees) { return degrees * M_PI / 180; }
     fadeInAnimation.autoreverses = YES;
     fadeInAnimation.duration = 0.8f;
     fadeInAnimation.repeatCount = MAXFLOAT;
-    fadeInAnimation.delegate = self;
+    fadeInAnimation.removedOnCompletion = YES;
     [layer addAnimation:fadeInAnimation forKey:nil];
 }
 
-#pragma mark - Show/Dismiss Method
-+ (void)dismiss {
-    [[CLProgressHUD shareInstance] dismiss];
+#pragma mark ========== KVO ==========
+- (void)registerKVO {
+    for (NSString *keyPath in [self observableKeypaths]) {
+        [self addObserver:self
+               forKeyPath:keyPath
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    }
 }
 
-- (void)setLabelText:(NSString *)labelText {
-    self.stringLabel.text = labelText;
+- (void)unregisterKVO {
+    for (NSString *keyPath in [self observableKeypaths]) {
+        [self removeObserver:self forKeyPath:keyPath];
+    }
+}
+
+- (NSArray *)observableKeypaths {
+    return @[@"text", @"shape", @"type"];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"text"]) {
+        self.stringLabel.text = self.text;
+    } else if ([keyPath isEqualToString:@"type"]) {
+        if (_type == CLProgressHUDTypeDarkBackground) {
+            self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8f];
+            _hudView.backgroundColor = [UIColor clearColor];
+        } else {
+            self.backgroundColor = [UIColor clearColor];
+            _hudView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8f];
+        }
+    } else if ([keyPath isEqualToString:@"shape"]) {
+        
+    }
+    [self setNeedsDisplay];
+}
+
+#pragma mark ========== Show/Dismiss Method ==========
+- (void)showWithAnimation:(BOOL)animated {
     [self layout];
+    _animationIndex = 0;
+    self.shapeLayers = [self createColorShapes:_ringsColor ofShape:_shape];
+    for (CAShapeLayer *layer in _shapeLayers) {
+        [_hudView.layer addSublayer:layer];
+    }
+    if (animated) {
+        [UIView animateWithDuration:0.5f
+                         animations:^{
+                             self.alpha = 1.0;
+                         } completion:^(BOOL finished) {
+                             [self startAnimation];
+                         }];
+    } else {
+        self.alpha = 1.0f;
+        [self startAnimation];
+    }
+}
+
+- (void)showWithAnimation:(BOOL)animated duration:(NSTimeInterval)duration {
+    [self showWithAnimation:animated];
+    [self performSelector:@selector(dismissWithAnimation:) withObject:[NSNumber numberWithBool:YES] afterDelay:duration];
+}
+
+- (void)dismiss {
+    [self removeFromSuperview];
+}
+
+- (void)dismissWithAnimation:(BOOL)animated {
+    if (animated) {
+        [UIView animateWithDuration:0.5f
+                         animations:^{
+                             self.alpha = 0.0;
+                         } completion:^(BOOL finished) {
+                             [self dismiss];
+                         }];
+    } else {
+        [self dismiss];
+    }
 }
 
 @end

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C98237991871BDE500678E33 /* CLProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = C98237981871BDE500678E33 /* CLProgressHUD.m */; };
+		C99AACEF188E2A970010B80C /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = C99AACED188E2A970010B80C /* README.md */; };
+		C99AACF0188E2A970010B80C /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = C99AACEE188E2A970010B80C /* LICENSE */; };
 		C9FC83771859B404002984E7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FC83761859B404002984E7 /* Foundation.framework */; };
 		C9FC83791859B404002984E7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FC83781859B404002984E7 /* CoreGraphics.framework */; };
 		C9FC837B1859B404002984E7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9FC837A1859B404002984E7 /* UIKit.framework */; };
@@ -38,6 +40,8 @@
 /* Begin PBXFileReference section */
 		C98237971871BDE500678E33 /* CLProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLProgressHUD.h; sourceTree = "<group>"; };
 		C98237981871BDE500678E33 /* CLProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLProgressHUD.m; sourceTree = "<group>"; };
+		C99AACED188E2A970010B80C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		C99AACEE188E2A970010B80C /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		C9FC83731859B404002984E7 /* CLProgressHUDDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CLProgressHUDDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9FC83761859B404002984E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C9FC83781859B404002984E7 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -96,6 +100,8 @@
 		C9FC836A1859B404002984E7 = {
 			isa = PBXGroup;
 			children = (
+				C99AACED188E2A970010B80C /* README.md */,
+				C99AACEE188E2A970010B80C /* LICENSE */,
 				C98237961871BDC700678E33 /* CLProgressHUD */,
 				C9FC837C1859B404002984E7 /* CLProgressHUDDemo */,
 				C9FC839E1859B404002984E7 /* CLProgressHUDDemoTests */,
@@ -244,8 +250,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C99AACF0188E2A970010B80C /* LICENSE in Resources */,
 				C9FC838D1859B404002984E7 /* Main_iPad.storyboard in Resources */,
 				C9FC83921859B404002984E7 /* Images.xcassets in Resources */,
+				C99AACEF188E2A970010B80C /* README.md in Resources */,
 				C9FC838A1859B404002984E7 /* Main_iPhone.storyboard in Resources */,
 				C9FC83811859B404002984E7 /* InfoPlist.strings in Resources */,
 			);

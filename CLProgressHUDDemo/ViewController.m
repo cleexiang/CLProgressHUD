@@ -28,11 +28,12 @@
 }
 
 - (IBAction)buttonClicked:(id)sender {
-    CLProgressHUD *hud = [CLProgressHUD shareInstance];
-    hud.type = CLProgressHUDTypeDarkForground;
+    CLProgressHUD *hud = [[CLProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
+    hud.text = @"Loading...";
     hud.shape = CLProgressHUDShapeLinear;
-    [hud showInView:self.view withText:@"loadadjoiaduiywiyuiqyquiyq"];
-    [hud performSelector:@selector(dismiss) withObject:nil afterDelay:5];
+    hud.type = CLProgressHUDTypeDarkForground;
+    [hud showWithAnimation:NO duration:5];
 }
 
 @end

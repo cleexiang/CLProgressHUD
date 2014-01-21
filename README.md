@@ -13,20 +13,21 @@ MBProgressHUD is a colorful progress loading view for your iPhone or iPad APP.It
 ###Usage
 ####Example
 ```  
-CLProgressHUD *hud = [CLProgressHUD shareInstance];   
+CLProgressHUD *hud = [[CLProgressHUD alloc] initWithView:self.view];
+[self.view addSubview:hud];
+hud.text = @"Loading...";
+hud.shape = CLProgressHUDShapeLinear;
 hud.type = CLProgressHUDTypeDarkForground;
-hud.shape = CLProgressHUDShapeCircle;
-[hud showInView:self.view withText:@"Loading text..."];
-[hud performSelector:@selector(dismiss) withObject:nil afterDelay:5];
+[hud showWithAnimation:NO duration:5];
 ```
 ####Method
 ```
-- (void)showInView:(UIView *)view;
-- (void)showInView:(UIView *)view withText:(NSString *)text;
-- (void)showInView:(UIView *)view withText:(NSString *)text duration:(NSTimeInterval)duration;
-+ (void)dismiss;
+- (void)showWithAnimation:(BOOL)animated;
+- (void)showWithAnimation:(BOOL)animated duration:(NSTimeInterval)duration;
+- (void)dismissWithAnimation:(BOOL)animated;
 ```
 ####You Can Set up
+* text
 * CLProgressHUDType
 * CLProgressHUDShape
 * diameter
