@@ -105,23 +105,12 @@ float Degrees2Radians(float degrees) { return degrees * M_PI / 180; }
 }
 
 #pragma mark - Private Method
-- (void)show {
-    [self layout];
-    _animationIndex = 0;
-    self.alpha = 1.0f;
-    self.shapeLayers = [self createColorShapes:_ringsColor ofShape:_shape];
-    for (CAShapeLayer *layer in _shapeLayers) {
-        [_hudView.layer addSublayer:layer];
-    }
-    [self startAnimation];
-}
-
 - (NSArray *)createColorShapes:(NSArray *)colors ofShape:(CLProgressHUDShape)shape {
     NSMutableArray *shapesArray = [NSMutableArray array];
     if (shape == CLProgressHUDShapeLinear) {
         CGFloat x = (CGRectGetWidth(_hudView.bounds)-_diameter*(_ringsColor.count*2-1))*0.5;
         CGFloat y;
-        if (self.text == nil || [self.text isEqualToString:@""]) {
+        if ([_stringLabel.text isEqualToString:@""]) {
             y = CGRectGetHeight(_hudView.bounds)*0.5;
         } else {
             y = CGRectGetHeight(_hudView.bounds)*0.5+_diameter;
@@ -144,7 +133,7 @@ float Degrees2Radians(float degrees) { return degrees * M_PI / 180; }
     } else {
         CGFloat centerX = CGRectGetWidth(_hudView.bounds)*0.5;
         CGFloat centerY;
-        if (self.text == nil || [self.text isEqualToString:@""]) {
+        if ([_stringLabel.text isEqualToString:@""]) {
             centerY = (CGRectGetHeight(_hudView.bounds)-_diameter)*0.5;
         } else {
             centerY = (CGRectGetHeight(_hudView.bounds)-_diameter*2)*0.5-5;
@@ -182,7 +171,9 @@ float Degrees2Radians(float degrees) { return degrees * M_PI / 180; }
     NSTimeInterval interval = 0;
     for (CALayer *layer in [self shapeLayers]) {
         [self performSelector:@selector(addAnimationToLayer:)
-                   withObject:layer afterDelay:interval];
+                   withObject:layer
+                   afterDelay:interval
+                      inModes:@[NSRunLoopCommonModes]];
         interval += 0.2;
     }
 }
@@ -198,7 +189,6 @@ float Degrees2Radians(float degrees) { return degrees * M_PI / 180; }
     fadeInAnimation.autoreverses = YES;
     fadeInAnimation.duration = 0.8f;
     fadeInAnimation.repeatCount = MAXFLOAT;
-    fadeInAnimation.removedOnCompletion = YES;
     [layer addAnimation:fadeInAnimation forKey:nil];
 }
 
@@ -239,7 +229,11 @@ float Degrees2Radians(float degrees) { return degrees * M_PI / 180; }
     [self setNeedsDisplay];
 }
 
-#pragma mark ========== Show/Dismiss Method ==========
+#pragma mark - Show/Dismiss Method
+- (void)show {
+    [self showWithAnimation:NO];
+}
+
 - (void)showWithAnimation:(BOOL)animated {
     [self layout];
     _animationIndex = 0;
@@ -247,10 +241,17 @@ float Degrees2Radians(float degrees) { return degrees * M_PI / 180; }
     for (CAShapeLayer *layer in _shapeLayers) {
         [_hudView.layer addSublayer:layer];
     }
+    if (_type == CLProgressHUDTypeDarkBackground) {
+        self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8f];
+        _hudView.backgroundColor = [UIColor clearColor];
+    } else {
+        self.backgroundColor = [UIColor clearColor];
+        _hudView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8f];
+    }
     if (animated) {
         [UIView animateWithDuration:0.5f
                          animations:^{
-                             self.alpha = 1.0;
+                             self.alpha = 1.0f;
                          } completion:^(BOOL finished) {
                              [self startAnimation];
                          }];

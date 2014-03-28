@@ -1,7 +1,7 @@
 CLProgressHUD
 =============
 
-MBProgressHUD is a colorful progress loading view for your iPhone or iPad APP.It works on any iOS version and is compatible with ARC projects. 
+CLProgressHUD is a colorful progress loading view for your iPhone or iPad APP.It works on any iOS version and is compatible with ARC projects. 
 
 ###ScreenShots
 <span><img src="./Screenshot/1.png" width="320px" heght="480px"></span>

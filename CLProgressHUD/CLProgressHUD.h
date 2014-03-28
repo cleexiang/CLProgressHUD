@@ -27,10 +27,11 @@ typedef NS_ENUM(NSUInteger, CLProgressHUDShape) {
 @property (nonatomic, assign) CGFloat diameter;
 @property (nonatomic, strong) NSString *text;
 
-
 - (id)initWithView:(UIView *)view;
+- (void)show;
 - (void)showWithAnimation:(BOOL)animated;
 - (void)showWithAnimation:(BOOL)animated duration:(NSTimeInterval)duration;
+- (void)dismiss;
 - (void)dismissWithAnimation:(BOOL)animated;
 
 @end

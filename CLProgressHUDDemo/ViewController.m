@@ -31,9 +31,9 @@
     CLProgressHUD *hud = [[CLProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:hud];
     hud.text = @"Loading...";
-    hud.shape = CLProgressHUDShapeLinear;
+    hud.shape = CLProgressHUDShapeCircle;
     hud.type = CLProgressHUDTypeDarkForground;
-    [hud showWithAnimation:NO duration:5];
+    [hud showWithAnimation:YES duration:3.0];
 }
 
 @end
