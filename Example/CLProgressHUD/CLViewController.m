@@ -7,6 +7,7 @@
 //
 
 #import "CLViewController.h"
+#import <CLProgressHUD/CLProgressHUD.h>
 
 @interface CLViewController ()
 
@@ -24,6 +25,15 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)buttonClicked:(id)sender {
+    CLProgressHUD *hud = [[CLProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:hud];
+    hud.text = @"Loading...";
+    hud.shape = CLProgressHUDShapeCircle;
+    hud.type = CLProgressHUDTypeDarkForground;
+    [hud showWithAnimation:YES duration:3.0];
 }
 
 @end

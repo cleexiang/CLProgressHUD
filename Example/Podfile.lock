@@ -1,0 +1,16 @@
+PODS:
+  - CLProgressHUD (0.1.0)
+
+DEPENDENCIES:
+  - CLProgressHUD (from `../`)
+
+EXTERNAL SOURCES:
+  CLProgressHUD:
+    :path: ../
+
+SPEC CHECKSUMS:
+  CLProgressHUD: 78f78a73a29a543e99a7ccc6f44a9f1937c45205
+
+PODFILE CHECKSUM: 7c5235bc0f597d7ff98c82dcf0ce0e0ff91db3f1
+
+COCOAPODS: 1.2.0

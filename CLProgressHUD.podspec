@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CLProgressHUD'
-  s.version          = '0.1.0'
-  s.summary          = 'A short description of CLProgressHUD.'
+  s.version          = '0.0.1'
+  s.summary          = 'A colorful progress loading control for you iPhone or iPad APP.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 TODO: Add long description of the pod here.
                        DESC
 
-  s.homepage         = 'https://github.com/clee/CLProgressHUD'
+  s.homepage         = 'https://github.com/cleexiang/CLProgressHUD'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'clee' => 'cleexiang@126.com' }
@@ -30,7 +30,7 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'CLProgressHUD/Classes/**/*'
+  s.source_files = 'Classes/**/*'
   
   # s.resource_bundles = {
   #   'CLProgressHUD' => ['CLProgressHUD/Assets/*.png']
